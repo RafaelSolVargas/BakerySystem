@@ -73,6 +73,7 @@ class App(QMainWindow, Ui_MainWindow):
 
     def Conectar_Banco(self):
         # Deve retornar uma estrutura com o codigo, nome, quant, precoUnit, precoTot
+        # Comentário
         pass
 
 
