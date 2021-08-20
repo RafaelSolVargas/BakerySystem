@@ -20,9 +20,11 @@ novoProduto = {
     'PrecoTot': 50
 }
 
+# Testando Branch
 
 # Preparar Funções do ADM
 # Preparar Funções de Conexão
+
 
 class App(QMainWindow, Ui_MainWindow):
     def __init__(self):  # Construtor do APP
