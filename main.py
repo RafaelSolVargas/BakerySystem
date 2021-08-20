@@ -10,6 +10,8 @@ from PyQt5.QtWidgets import QMainWindow, QApplication, QTableWidget, QTableWidge
 
 titulos = ['Código', 'Nome', 'Quantidade', 'Preço Unitário', 'Preço Total']
 
+produto = [11111, "Bolacha", 5, 10, 50]
+
 novoProduto = {
     'Codigo': 11111,
     'Nome': 'Bolacha',
@@ -18,6 +20,9 @@ novoProduto = {
     'PrecoTot': 50
 }
 
+
+# Preparar Funções do ADM
+# Preparar Funções de Conexão
 
 class App(QMainWindow, Ui_MainWindow):
     def __init__(self):  # Construtor do APP
@@ -80,19 +85,12 @@ class App(QMainWindow, Ui_MainWindow):
             lista_Compra.append(produto)
         print(lista_Compra)
 
-        lista_Compra = []
-        for linha in range(self.tabCarrinho.rowCount()):
-            codigo = int(self.tabCarrinho.item(linha, 0).item())
-            nome = self.tabCarrinho.item(linha, 1).item()
-            quant = int(self.tabCarrinho.item(linha, 2).item())
-            valorTot = int(self.tabCarrinho.item(linha, 4).item())
+        # Remover da DB Estoque
+        # UPDATE estoque
 
-            # Remover da DB Estoque
-            # UPDATE estoque
-
-            # Adicionar na DB Historic
-            # INSERT INTO historico (codigo, nome, data, quant, valorTot)
-            # VALUES (codigo, nome, NOW(), quant, valorTOT)
+        # Adicionar na DB Historic
+        # INSERT INTO historico (codigo, nome, data, quant, valorTot)
+        # VALUES (codigo, nome, NOW(), quant, valorTOT)
 
     def Remover_Item(self):
         # Busca a linha atual
