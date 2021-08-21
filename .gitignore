@@ -1,0 +1,4 @@
+Lib/
+__pycache__/
+pyvenv.cfg
+design/__pycache__
