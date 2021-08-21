@@ -1,29 +1,15 @@
-# Importar a classe da GUI feita no PyQT5
-#teste branch
-# Instanciar a nossa classe
-
-import sys
-from conexoes import Add_Historico, Carregar_Produto, Verificar_Codigo, Att_Estoque
-from adm import Acessar_Adm
-from design2 import Ui_MainWindow
+import sys  # Importando bibliotecas externas
+# Importando bibliotecas externas
 from PyQt5.QtWidgets import QMainWindow, QApplication, QTableWidget, QTableWidgetItem
 
+# Importando funções de outros arquivos e o design das abas
+from conexoes import *
+from adm import *
+from designs.designMain import Ui_MainWindow
+from designs.designLogin import Ui_LoginWindow
+
+
 titulos = ['Código', 'Nome', 'Quantidade', 'Preço Unitário', 'Preço Total']
-
-produto = [11111, "Bolacha", 5, 10, 50]
-
-novoProduto = {
-    'Codigo': 11111,
-    'Nome': 'Bolacha',
-    'Quant': 5,
-    'PrecoUnit': 10,
-    'PrecoTot': 50
-}
-
-# Testando Branch
-
-# Preparar Funções do ADM
-# Preparar Funções de Conexão
 
 
 class App(QMainWindow, Ui_MainWindow):
@@ -36,14 +22,16 @@ class App(QMainWindow, Ui_MainWindow):
         self.tabCarrinho.setHorizontalHeaderLabels(titulos)
 
         # Adicionar as conexões intrínsecas a cada botão
-        self.btnAdicionar.clicked.connect(self.Add_Carrinho)
-        self.btnRemover.clicked.connect(self.Concluir_Compra)
-        self.btnLimpar.clicked.connect(self.Limpar_Carrinho)
+        self.btnMainAdicionar.clicked.connect(self.Add_Carrinho)
+        self.btnMainRemover.clicked.connect(self.Remover_Item)
+        self.btnMainLimpar.clicked.connect(self.Limpar_Carrinho)
+        self.btnMainConcluir.clicked.connect(self.Concluir_Compra)
 
     def Add_Carrinho(self):
-        codigo = self.txtCod.text()
+        codigo = int(self.txtMainCod.text())
+        quant = int(self.txtMainQuant.text())
 
-        if Verificar_Codigo(self, codigo):
+        if Verificar_Codigo(codigo, quant):
             # Traz o produto do banco de dados
             produto = Carregar_Produto(codigo)
 
@@ -54,21 +42,24 @@ class App(QMainWindow, Ui_MainWindow):
             self.tabCarrinho.insertRow(linhasCount)
 
             # Cria as variáveis dos itens para adicionar na nova linha
-            codigo = QTableWidgetItem(str(produto['Codigo']))
-            nome = QTableWidgetItem(produto['Nome'])
-            quant = QTableWidgetItem(str(produto['Quant']))
-            precoUnit = QTableWidgetItem(str(produto['PrecoUnit']))
-            precoTot = QTableWidgetItem(str(produto['PrecoTot']))
+            codigoQT = QTableWidgetItem(str(codigo))
+            nomeQT = QTableWidgetItem(produto[1])
+            quantQT = QTableWidgetItem(str(quant))
+            precoUnitQT = QTableWidgetItem(str(produto[2]))
+            precoTotQT = QTableWidgetItem(str(produto[2]*quant))
 
             # Adiciona cada item na nova linha e na coluna correta
-            self.tabCarrinho.setItem(linhasCount, 0, codigo)
-            self.tabCarrinho.setItem(linhasCount, 1, nome)
-            self.tabCarrinho.setItem(linhasCount, 2, quant)
-            self.tabCarrinho.setItem(linhasCount, 3, precoUnit)
-            self.tabCarrinho.setItem(linhasCount, 4, precoTot)
+            self.tabCarrinho.setItem(linhasCount, 0, codigoQT)
+            self.tabCarrinho.setItem(linhasCount, 1, nomeQT)
+            self.tabCarrinho.setItem(linhasCount, 2, quantQT)
+            self.tabCarrinho.setItem(linhasCount, 3, precoUnitQT)
+            self.tabCarrinho.setItem(linhasCount, 4, precoTotQT)
 
         else:
-            pass
+            self.txtMainCod.setText("")
+            self.txtMainQuant.clear()
+            self.txtMainMessage.setText(
+                "CÓDIGO INVÁLIDO OU QUANTIDADE INVÁLIDA")
 
     def Limpar_Carrinho(self):
         # Limpa todo o conteúdo da tabela
@@ -85,14 +76,10 @@ class App(QMainWindow, Ui_MainWindow):
                 item = self.tabCarrinho.item(linha, coluna)
                 produto.append(item.text())
             lista_Compra.append(produto)
-        print(lista_Compra)
 
-        # Remover da DB Estoque
-        # UPDATE estoque
+        # Implementar chamada para Atualizar Estoque
 
-        # Adicionar na DB Historic
-        # INSERT INTO historico (codigo, nome, data, quant, valorTot)
-        # VALUES (codigo, nome, NOW(), quant, valorTOT)
+        # Implementar chamada para Adicionar venda ao Histórico
 
     def Remover_Item(self):
         # Busca a linha atual
