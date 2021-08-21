@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-def Acessar_Adm(self):
-=======
 def Acessar_Adm():
     pass
 
@@ -27,5 +24,4 @@ def Buscar_Estoque():
 
 
 def Buscar_Produto():
->>>>>>> 05514bf (Adicionando as GUI, o banco de dados e as funções para acessar o banco de dados)
     pass
