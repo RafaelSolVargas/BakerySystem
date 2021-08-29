@@ -61,7 +61,7 @@ def Add_Historico(produtos):
         conn.commit()
 
 
-def Att_Estoque(produtos):
+def Remover_Estoque(produtos):
     """
     Irá diminuir a quantidade de cada produto após uma venda ser concluída
     O array de cada produto deve seguir a seguinte ordem: 
