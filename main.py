@@ -78,8 +78,9 @@ class App(QMainWindow, Ui_MainWindow):
             lista_Compra.append(produto)
 
         # Implementar chamada para Atualizar Estoque
-
+        Remover_Estoque(lista_Compra)
         # Implementar chamada para Adicionar venda ao Histórico
+        Add_Historico(lista_Compra)
 
     def Remover_Item(self):
         # Busca a linha atual

@@ -1,3 +1,5 @@
+from conexoes import *
+
 def Acessar_Adm():
     pass
 
@@ -16,10 +18,6 @@ def Adicionar_User():
 
 
 def Buscar_Historico():
-    pass
-
-
-def Buscar_Estoque():
     pass
 
 
