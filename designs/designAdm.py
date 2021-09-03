@@ -219,6 +219,6 @@ if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     AdmWindow = QtWidgets.QMainWindow()
     ui = Ui_AdmWindow()
-    ui.setupUi(AdmWindow)
+    ui.setup(AdmWindow)
     AdmWindow.show()
     sys.exit(app.exec_())

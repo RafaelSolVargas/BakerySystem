@@ -1,5 +1,6 @@
 import sys  # Importando bibliotecas externas
 # Importando bibliotecas externas
+from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtWidgets import QMainWindow, QApplication, QTableWidget, QTableWidgetItem
 
 # Importando funções de outros arquivos e o design das abas
@@ -7,6 +8,7 @@ from conexoes import *
 from adm import *
 from designs.designMain import Ui_MainWindow
 from designs.designLogin import Ui_LoginWindow
+from designs.designAdm import Ui_AdmWindow
 
 
 titulos = ['Código', 'Nome', 'Quantidade', 'Preço Unitário', 'Preço Total']
@@ -26,6 +28,7 @@ class App(QMainWindow, Ui_MainWindow):
         self.btnMainRemover.clicked.connect(self.Remover_Item)
         self.btnMainLimpar.clicked.connect(self.Limpar_Carrinho)
         self.btnMainConcluir.clicked.connect(self.Concluir_Compra)
+        self.commandLinkButton.clicked.connect(self.loginUi)
 
     def Add_Carrinho(self):
         codigo = int(self.txtMainCod.text())
@@ -92,6 +95,11 @@ class App(QMainWindow, Ui_MainWindow):
         # Coloca a célula selecionada em nada
         self.tabCarrinho.setCurrentCell(-1, 0)
 
+    def loginUi(self):
+        self.window = QtWidgets.QMainWindow()
+        self.ui = Ui_LoginWindow()
+        self.ui.setupUi(self.window)
+        self.window.show()
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
