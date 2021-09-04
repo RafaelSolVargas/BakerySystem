@@ -4,6 +4,8 @@ from datetime import datetime
 from sqlite3.dbapi2 import Error
 import bcrypt
 
+databasePath = 'padaria.db'
+
 
 @contextmanager
 def Conectar(database):
@@ -41,7 +43,7 @@ def Verificar_Codigo(codigo, quant):
             return True
         else:
             raise ValueError(
-                "ERRO: Existem códigos duplicados no Estoque ou Quantidade insuficiente")
+                "ERRO: Existem códigos duplicados")
 
 
 def Add_Historico(produtos):
@@ -51,8 +53,7 @@ def Add_Historico(produtos):
     Cada produto dentro da lista de produtos deve ser um array ou tupla com as seguintes informações 
     Na respectiva ordem: codigo, nome, quant, valorTot
     """
-
-    with Conectar('padaria.db') as (conn, cursor):
+    with Conectar(databasePath) as (conn, cursor):
         data = datetime.today().strftime('%Y-%m-%d %H:%M')
 
         for produto in produtos:
@@ -61,13 +62,13 @@ def Add_Historico(produtos):
         conn.commit()
 
 
-def Att_Estoque(produtos):
+def Remover_Estoque(produtos):
     """
     Irá diminuir a quantidade de cada produto após uma venda ser concluída
     O array de cada produto deve seguir a seguinte ordem: 
     codigo, quantidade 
     """
-    with Conectar('padaria.db') as (conn, cursor):
+    with Conectar(databasePath) as (conn, cursor):
 
         for produto in produtos:
             cursor.execute(
@@ -81,7 +82,7 @@ def Carregar_Produto(codigo):
     Recebe um codigo e retorna uma tupla com os dados desse produto cadastrados no estoque,
     Na seguinte ordem: codigo(int), nome(str), valorUnit(float)
     """
-    with Conectar('padaria.db') as (conn, cursor):
+    with Conectar(databasePath) as (conn, cursor):
         cursor.execute(
             f'SELECT codigo, nome, preco FROM estoque WHERE codigo = {codigo}')
         conn.commit()
@@ -98,7 +99,7 @@ def Buscar_Historico():
     Retorna uma lista com tuplas, contendo todos os cadastros de vendas no historico, as tuplas
     seguem a seguinte ordem: id, codigo, nome, data, quant, valorTot
     """
-    with Conectar('padaria.db') as (conn, cursor):
+    with Conectar(databasePath) as (conn, cursor):
         cursor.execute('SELECT * FROM historico')
         conn.commit()
 
@@ -110,7 +111,7 @@ def Buscar_Estoque():
     Retorna uma lista com tuplas, cada tupla possui as informações de um produto no estoque
     as tuplas seguem a seguinte ordem: codigo, nome, quant, precoUnit
     """
-    with Conectar('padaria.db') as (conn, cursor):
+    with Conectar(databasePath) as (conn, cursor):
         cursor.execute('SELECT codigo, nome, quant, preco FROM estoque')
         conn.commit()
 
@@ -123,7 +124,7 @@ def Verificar_User(login, senha):
     um cadastro em que o login e senha passados batam com o registro, retorna False caso não encontre
     nenhum caso que os dados batam, a senha deve ser passada como string
     """
-    with Conectar('padaria.db') as (conn, cursor):
+    with Conectar(databasePath) as (conn, cursor):
         senha_byte = str.encode(senha)
 
         cursor.execute(
@@ -145,7 +146,31 @@ def Cadastrar_User(login, senha):
     senha_byte = str.encode(senha)
     hashed = bcrypt.hashpw(senha_byte, bcrypt.gensalt())
 
-    with Conectar('padaria.db') as (conn, cursor):
+    with Conectar(databasePath) as (conn, cursor):
         cursor.execute(
             'INSERT INTO usuarios (login, senha) VALUES (?, ?)', (login, hashed))
         conn.commit()
+
+
+def Cadastrar_Produto(codigo, nome, preco, quantidade):
+    with Conectar(databasePath) as (conn, cursor):
+        cursor.execute(
+            'INSERT INTO estoque (codigo, nome, preco, quant) VALUES (?, ?, ?, ?)',
+            (codigo, nome, preco, quantidade))
+        conn.commit()
+
+
+def Atualizar_Produto(codigo, nome, preco, quantidade):
+    with Conectar(databasePath) as (conn, cursor):
+        cursor.execute(
+            'UPDATE estoque SET nome = ?, preco = ?, quant = ? WHERE codigo = ?'
+            (nome, preco, quantidade, codigo))
+        conn.commit()
+
+
+def Buscar_Produto(codigo):
+    with Conectar(databasePath) as (conn, cursor):
+        cursor.execute(
+            'SELECT codigo, nome, quant, preco FROM estoque WHERE codigo = ?', (codigo,))
+        conn.commit()
+        return cursor.fetchone()

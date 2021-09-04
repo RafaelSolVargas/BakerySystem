@@ -4,15 +4,14 @@ from PyQt5.QtWidgets import QMainWindow, QApplication, QTableWidget, QTableWidge
 
 # Importando funções de outros arquivos e o design das abas
 from conexoes import *
-from adm import *
+from login import Login
 from designs.designMain import Ui_MainWindow
-from designs.designLogin import Ui_LoginWindow
 
 
 titulos = ['Código', 'Nome', 'Quantidade', 'Preço Unitário', 'Preço Total']
 
 
-class App(QMainWindow, Ui_MainWindow):
+class Main(QMainWindow, Ui_MainWindow):
     def __init__(self):  # Construtor do APP
         super().__init__()  # Chama o construtor padrão da biblioteca PyQT5
         super().setupUi(self)  # Chama o construtor setupUi do design.py
@@ -26,10 +25,17 @@ class App(QMainWindow, Ui_MainWindow):
         self.btnMainRemover.clicked.connect(self.Remover_Item)
         self.btnMainLimpar.clicked.connect(self.Limpar_Carrinho)
         self.btnMainConcluir.clicked.connect(self.Concluir_Compra)
+        self.commandLinkButton.clicked.connect(self.Mostrar_Login)
 
     def Add_Carrinho(self):
-        codigo = int(self.txtMainCod.text())
-        quant = int(self.txtMainQuant.text())
+        codigo = self.txtMainCod.text()
+        quant = self.txtMainQuant.text()
+
+        # ALTERAÇÃO
+        if codigo == "" or quant == "":
+            self.txtMainMessage.setText(
+                "DADOS INCOMPLETOS, COLOQUE ALGO")
+            return
 
         if Verificar_Codigo(codigo, quant):
             # Traz o produto do banco de dados
@@ -77,9 +83,10 @@ class App(QMainWindow, Ui_MainWindow):
                 produto.append(item.text())
             lista_Compra.append(produto)
 
-        Att_Estoque()
-
-        Add_Historico()
+        # Implementar chamada para Atualizar Estoque
+        Remover_Estoque(lista_Compra)
+        # Implementar chamada para Adicionar venda ao Histórico
+        Add_Historico(lista_Compra)
 
     def Remover_Item(self):
         # Busca a linha atual
@@ -91,9 +98,14 @@ class App(QMainWindow, Ui_MainWindow):
         # Coloca a célula selecionada em nada
         self.tabCarrinho.setCurrentCell(-1, 0)
 
+    def Mostrar_Login(self):
+        # Cria um novo objeto com a classe Login
+        self.loginWindow = Login()
+        self.loginWindow.show()  # E mostra ele na tela
+
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    janela = App()
+    janela = Main()
     janela.show()
     app.exec()

@@ -1,27 +1,12 @@
-def Acessar_Adm():
-    pass
+from conexoes import *
+from PyQt5.QtWidgets import QMainWindow
+from designs.designAdm import Ui_AdmWindow
 
 
-def Cadastrar_Produto():
-    pass
+class Adm(QMainWindow, Ui_AdmWindow):
+    def __init__(self):
+        super().__init__()  # Chama o construtor padrão da biblioteca PyQT5
+        super().setupUi(self)  # Chama o construtor setupUi do design.py
 
-
-def Atualizar_Produto():
-    pass
-
-
-def Adicionar_User():
-
-    pass
-
-
-def Buscar_Historico():
-    pass
-
-
-def Buscar_Estoque():
-    pass
-
-
-def Buscar_Produto():
-    pass
+        ############################
+        # Configurar aqui toda a lógica da tela do ADM com os clicked.connect()
