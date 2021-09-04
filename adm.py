@@ -8,5 +8,10 @@ class Adm(QMainWindow, Ui_AdmWindow):
         super().__init__()  # Chama o construtor padrão da biblioteca PyQT5
         super().setupUi(self)  # Chama o construtor setupUi do design.py
 
-        ############################
-        # Configurar aqui toda a lógica da tela do ADM com os clicked.connect()
+        # Conexão dos botões da tela do ADM com suas respectivas funções
+        self.btnAdmCadastrar.clicked.connect(self.Cadastrar_Produto)
+        self.btnAdmAtualizar.clicked.connect(self.Atualizar_Produto)
+        self.btnAdmBuscarAtualiozar.clicked.connect(self.Buscar_Produto)
+        self.btnAdmAdicionarUser.clicked.connect(self.Cadastrar_User)
+        self.btnAdmHistorico.clicked.connect(self.Buscar_Historico)
+        self.btnAdmEstoque.clicked.connect(self.Buscar_Estoque)

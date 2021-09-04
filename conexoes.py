@@ -163,7 +163,7 @@ def Cadastrar_Produto(codigo, nome, preco, quantidade):
 def Atualizar_Produto(codigo, nome, preco, quantidade):
     with Conectar(databasePath) as (conn, cursor):
         cursor.execute(
-            'UPDATE estoque SET nome = ?, preco = ?, quant = ? WHERE codigo = ?'
+            'UPDATE estoque SET nome = ?, preco = ?, quant = ? WHERE codigo = ?',
             (nome, preco, quantidade, codigo))
         conn.commit()
 
