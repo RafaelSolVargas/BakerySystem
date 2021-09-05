@@ -83,6 +83,11 @@ class Main(QMainWindow, Ui_MainWindow):
                 produto.append(item.text())
             lista_Compra.append(produto)
 
+        # Apenas settar a mensagem de erro, as funções não são executadas caso a lista seja vazia
+        if lista_Compra == []:
+            self.txtMainMessage.setText(
+                "CARRINHO VAZIO")
+        
         # Implementar chamada para Atualizar Estoque
         Remover_Estoque(lista_Compra)
         # Implementar chamada para Adicionar venda ao Histórico

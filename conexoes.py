@@ -8,9 +8,9 @@ databasePath = 'padaria.db'
 
 
 @contextmanager
-def Conectar(database):
+def Conectar(databasePath):
     try:
-        conn = sqlite3.connect(database)
+        conn = sqlite3.connect(databasePath)
         cursor = conn.cursor()
         yield conn, cursor
 
@@ -173,4 +173,6 @@ def Buscar_Produto(codigo):
         cursor.execute(
             'SELECT codigo, nome, quant, preco FROM estoque WHERE codigo = ?', (codigo,))
         conn.commit()
+
+        # Retorna uma tupla com os dados na ordem codigo, nome, quant e preco
         return cursor.fetchone()
