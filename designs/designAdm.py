@@ -207,7 +207,7 @@ class Ui_AdmWindow(object):
         self.btnAdmAtualizar.setText(_translate("AdmWindow", "Atualizar"))
         self.btnAdmBuscarAtualiozar.setText(_translate("AdmWindow", "Buscar"))
         self.boxAdicionarAdm.setTitle(_translate("AdmWindow", "Adicionar Novo Usuário"))
-        self.labAdmLogin.setText(_translate("AdmWindow", "Login"))
+        self.labAdmLogin.setText(_translate("AdmWindow", "Login:"))
         self.labAdmSenha.setText(_translate("AdmWindow", "Senha:"))
         self.btnAdmAdicionarUser.setText(_translate("AdmWindow", "Adicionar"))
         self.btnAdmHistorico.setText(_translate("AdmWindow", "Buscar Histórico"))
