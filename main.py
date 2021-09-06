@@ -29,41 +29,39 @@ class Main(QMainWindow, Ui_MainWindow):
         self.commandLinkButton.clicked.connect(self.Mostrar_Login)
 
     def Add_Carrinho(self):
+        self.txtMainMessage.setText("")
+
         codigo = self.txtMainCod.text()
         quant = self.txtMainQuant.text()
 
-        # ALTERAÇÃO
         if codigo == "" or quant == "":
             self.txtMainMessage.setText(
                 "DADOS INCOMPLETOS, COLOQUE ALGO")
             return
 
-        quantidade_anterior = 0
-        index = 0
-        in_cache = False
-        pode_add = False
+        try:
+            quant = int(quant)
+            codigo = int(codigo)
+        except:
+            self.txtMainMessage.setText(
+                "DADOS INVÁLIDOS")
+            return
+
+        in_Cache = False
+        compra_Valida = True
 
         # Procura o item no cache
-        for anterior in cache:
-            if int(codigo) in anterior:
-                index = cache.index(anterior)
-                quantidade_anterior = anterior[1]
-                in_cache = True
+        for produto in cache:
+            if produto[0] == codigo:
+                if quant <= produto[1]:
+                    produto[1] -= quant
+                    in_Cache = True
+                else:
+                    compra_Valida = False
                 break
 
-        # Caso esteja no cache, verifica se tem estoque suficiente
-        if in_cache:
-            if quantidade_anterior >= int(quant) and quantidade_anterior > 0:
-                cache[index][1] -= int(quant)
-                pode_add = True
-
         # Caso contrário, verifica se o item está presente no banco de dados
-        else:
-            if Verificar_Codigo(codigo, quant):
-                pode_add = True
-
-        # Se o item estiver registrado em algum desses lugares, ele é adiocionado ao carrinho
-        if pode_add:
+        if Verificar_Codigo(codigo, quant) and compra_Valida:
             # Traz o produto do banco de dados
             produto = Carregar_Produto(codigo)
 
@@ -82,6 +80,9 @@ class Main(QMainWindow, Ui_MainWindow):
             precoTotQT = QTableWidgetItem(
                 "R$ " + str(f'{produto[2]*int(quant):.2f}').replace('.', ','))
 
+            if not in_Cache:
+                cache.append([codigo, produto[3]-quant])
+
             # Adiciona cada item na nova linha e na coluna correta
             self.tabCarrinho.setItem(linhasCount, 0, codigoQT)
             self.tabCarrinho.setItem(linhasCount, 1, nomeQT)
@@ -89,97 +90,82 @@ class Main(QMainWindow, Ui_MainWindow):
             self.tabCarrinho.setItem(linhasCount, 3, precoUnitQT)
             self.tabCarrinho.setItem(linhasCount, 4, precoTotQT)
 
-            # Caso o item não esteja registrado no cache, ele é registrado já com a quantidade descontada
-            if not in_cache:
-                cache.append([produto[0], (produto[3]-int(quant))])
-
         else:
+            compra_Valida = False
+
+        if not compra_Valida:
             self.txtMainCod.setText("")
             self.txtMainQuant.clear()
             self.txtMainMessage.setText(
-                "CÓDIGO INVÁLIDO OU QUANTIDADE INVÁLIDA")
+                "CÓDIGO INVÁLIDO OU QUANTIDADE EXCEDENTE")
 
     def Limpar_Carrinho(self):
-        # Limpa todo o conteúdo da tabela
         self.tabCarrinho.clearContents()
-
-        # Remove todas as colunas
         self.tabCarrinho.setRowCount(0)
-
-        # Limpa o conteúdo do cache
         cache.clear()
-
         self.txtMainMessage.setText(
             "CARRINHO LIMPO")
 
     def Concluir_Compra(self):
+        # Verifica logo de início se tem algo alguma compra acontecendo
+        if self.tabCarrinho.rowCount() == 0:
+            self.txtMainMessage.setText(
+                "NÃO HÁ COMPRA PARA CONCLUIR")
+            return
+
+        # Preenche um array com a lista de compra
         lista_Compra = []
+        totalCompra = 0
         for linha in range(self.tabCarrinho.rowCount()):
             produto = []
+
+            # Construindo a lista da compra
             for coluna in range(0, 5):
-                item = self.tabCarrinho.item(linha, coluna)
-                item = item.text()
-                item = item.replace(',', '.')
-                item = item.replace('R$ ', '')
+                item = self.tabCarrinho.item(linha, coluna).text()
+                item = item.replace(',', '.').replace('R$', '')
                 produto.append(item)
             lista_Compra.append(produto)
 
-        # Cálculo do total da compra
-        total = 0
-        for linha in range(self.tabCarrinho.rowCount()):
-            item = self.tabCarrinho.item(linha, 4)
-            item = item.text()
-            item = item.replace(',', '.')
-            item = item.replace('R$ ', '')
-            total += (float(item))
+            # Fazendo o cálculo do total da compra
+            totalProd = self.tabCarrinho.item(linha, 4).text()
+            totalProd = totalProd.replace(',', '.').replace('R$', '')
+            totalCompra += (float(item))
 
-        # Apenas settar a mensagem de erro, as funções não são executadas caso a lista seja vazia
-        if lista_Compra == []:
-            self.txtMainMessage.setText(
-                "CARRINHO VAZIO")
-        else:
-            self.txtMainMessage.setText(
-                "COMPRA FINALIZADA! TOTAL DA COMPRA: R$ {:.2f}".format(total))
+        # Retorna ao cliente o valor total gasto com a compra
+        self.txtMainMessage.setText(
+            "COMPRA FINALIZADA! TOTAL DA COMPRA: R$ {:.2f}".format(totalCompra))
 
-        # Implementar chamada para Atualizar Estoque
+        # Chama as funções para atualizar o estoque e o histórico de compras
         Remover_Estoque(lista_Compra)
-        # Implementar chamada para Adicionar venda ao Histórico
         Add_Historico(lista_Compra)
 
-        # Limpa as lacunas
+        # Reseta o sistema para uma nova compra
         self.txtMainCod.clear()
         self.txtMainQuant.clear()
-
-        # Limpa todo o conteúdo da tabela
         self.tabCarrinho.clearContents()
-
-        # Remove todas as colunas
         self.tabCarrinho.setRowCount(0)
-
-        # Limpa o conteúdo do cache
         cache.clear()
 
     def Remover_Item(self):
         # Busca a linha atual
         linhaAtual = self.tabCarrinho.currentRow()
 
+        if linhaAtual == -1:
+            self.txtMainMessage.setText('NENHUMA LINHA SELECIONADA')
+            return
+
         # Adiciona o valor de estoque previamente tirado do cache de volta ao mesmo
-        item = self.tabCarrinho.item(linhaAtual, 0)
-        item2 = self.tabCarrinho.item(linhaAtual, 2)
+        itemCodigo = self.tabCarrinho.item(linhaAtual, 0).text()
+        itemQuant = self.tabCarrinho.item(linhaAtual, 2).text()
 
-        codigo = item.text()
-        quant = item2.text()
-
-        for i in cache:
-            if int(codigo) in i:
-                i[1] += int(quant)
+        for produto in cache:
+            if int(itemCodigo) in produto:
+                produto[1] += int(itemQuant)
 
         # Remove a linha
         self.tabCarrinho.removeRow(linhaAtual)
-
         # Coloca a célula selecionada em nada
         self.tabCarrinho.setCurrentCell(-1, 0)
-
         self.txtMainMessage.setText(
             "ITEM REMOVIDO COM SUCESSO")
 
@@ -187,6 +173,7 @@ class Main(QMainWindow, Ui_MainWindow):
         # Cria um novo objeto com a classe Login
         self.loginWindow = Login()
         self.loginWindow.show()  # E mostra ele na tela
+
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

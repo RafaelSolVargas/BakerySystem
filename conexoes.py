@@ -39,8 +39,11 @@ def Verificar_Codigo(codigo, quant):
 
         if len(retornos) == 0:
             return False
-        elif len(retornos) == 1 and retornos[0][1] >= int(quant):
-            return True
+        elif len(retornos) == 1:
+            if retornos[0][1] >= int(quant):
+                return True
+            else:
+                return False
         else:
             raise ValueError(
                 "ERRO: Existem códigos duplicados")
@@ -153,6 +156,9 @@ def Cadastrar_User(login, senha):
 
 
 def Cadastrar_Produto(codigo, nome, preco, quantidade):
+    if len(codigo) != 5:
+        raise ValueError("Código deve possuir 5 dígitos")
+
     with Conectar(databasePath) as (conn, cursor):
         cursor.execute(
             'INSERT or IGNORE INTO estoque (codigo, nome, preco, quant) VALUES (?, ?, ?, ?)',

@@ -9,13 +9,8 @@ class Login(QMainWindow, Ui_LoginWindow):
         super().__init__()  # Chama o construtor padrão da biblioteca PyQT5
         super().setupUi(self)  # Chama o construtor setupUi do design.py
 
-        # Se o botão cancelar for apertado, ativa a função para fechar essa tela
         self.btnLoginCancelar.clicked.connect(self.Fechar)
-        # Se o botão Login for apertado, ativa a função para verificar se dá para fazer Login
-        self.btnLogingLogin.clicked.connect(self.Abrir_Adm)
-
-        # NOTA IMPORTANTE: Para charmarmos métodos de classe (nativos ou não) de dentro do construtor, não usamos ()
-        # Mas para chamar métodos de classe de dentro de outros métodos de classe, usaremos os ()
+        self.btnLogingLogin.clicked.connect(self.Verificar)
 
     # Função para verificar se o login e senha batem
     def Verificar(self):
