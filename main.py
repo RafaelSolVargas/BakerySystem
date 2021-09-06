@@ -52,7 +52,7 @@ class Main(QMainWindow, Ui_MainWindow):
             nomeQT = QTableWidgetItem(produto[1])
             quantQT = QTableWidgetItem(str(quant))
             precoUnitQT = QTableWidgetItem(str(produto[2]))
-            precoTotQT = QTableWidgetItem(str(produto[2]*quant))
+            precoTotQT = QTableWidgetItem("R$" + str(round(produto[2]*int(quant), 2)))
 
             # Adiciona cada item na nova linha e na coluna correta
             self.tabCarrinho.setItem(linhasCount, 0, codigoQT)

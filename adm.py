@@ -122,7 +122,7 @@ class Adm(QMainWindow, Ui_AdmWindow):
             nomeQT = QTableWidgetItem(i[2])
             dataQT = QTableWidgetItem(i[3])
             quantQT = QTableWidgetItem(str(i[4]))
-            totalQT = QTableWidgetItem(("R$" + str(i[5])))
+            totalQT = QTableWidgetItem("R$" + str(round(i[5]*int(i[4]), 2)))
 
             self.tabAdmTabela.setItem(linhasCount, 0, codigoQT)
             self.tabAdmTabela.setItem(linhasCount, 1, nomeQT)
