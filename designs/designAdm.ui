@@ -282,6 +282,9 @@
      </property>
     </widget>
     <widget class="QLineEdit" name="txtAdmCodAtualizar">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
      <property name="geometry">
       <rect>
        <x>110</x>
@@ -384,7 +387,7 @@
       <bool>false</bool>
      </property>
     </widget>
-    <widget class="QPushButton" name="btnAdmBuscarAtualiozar">
+    <widget class="QPushButton" name="btnAdmBuscarAtualizar">
      <property name="geometry">
       <rect>
        <x>10</x>
