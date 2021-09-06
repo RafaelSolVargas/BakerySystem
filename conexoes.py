@@ -80,11 +80,11 @@ def Remover_Estoque(produtos):
 def Carregar_Produto(codigo):
     """
     Recebe um codigo e retorna uma tupla com os dados desse produto cadastrados no estoque,
-    Na seguinte ordem: codigo(int), nome(str), valorUnit(float)
+    Na seguinte ordem: codigo(int), nome(str), valorUnit(float), quantidade(int)
     """
     with Conectar(databasePath) as (conn, cursor):
         cursor.execute(
-            f'SELECT codigo, nome, preco FROM estoque WHERE codigo = {codigo}')
+            f'SELECT codigo, nome, preco, quant FROM estoque WHERE codigo = {codigo}')
         conn.commit()
 
         retorno = cursor.fetchall()

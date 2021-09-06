@@ -108,7 +108,6 @@ class Adm(QMainWindow, Ui_AdmWindow):
     def BuscarHistorico(self):
         self.tabAdmTabela.clearContents()
         self.tabAdmTabela.setRowCount(0)
-
         self.tabAdmTabela.setColumnCount(len(historico))
         self.tabAdmTabela.setHorizontalHeaderLabels(historico)
 
@@ -122,7 +121,7 @@ class Adm(QMainWindow, Ui_AdmWindow):
             nomeQT = QTableWidgetItem(i[2])
             dataQT = QTableWidgetItem(i[3])
             quantQT = QTableWidgetItem(str(i[4]))
-            totalQT = QTableWidgetItem("R$" + str(round(i[5]*int(i[4]), 2)))
+            totalQT = QTableWidgetItem("R$ " + str(f'{i[5]*int(i[4]):.2f}').replace('.', ','))
 
             self.tabAdmTabela.setItem(linhasCount, 0, codigoQT)
             self.tabAdmTabela.setItem(linhasCount, 1, nomeQT)
@@ -148,7 +147,7 @@ class Adm(QMainWindow, Ui_AdmWindow):
             codigoQT = QTableWidgetItem(str(i[0]))
             nomeQT = QTableWidgetItem(i[1])
             quantQT = QTableWidgetItem(str(i[2]))
-            precoQT = QTableWidgetItem(("R$" + str(i[3])))
+            precoQT = QTableWidgetItem("R$ " + str(f'{i[3]:.2f}').replace('.', ','))
 
             self.tabAdmTabela.setItem(linhasCount, 0, codigoQT)
             self.tabAdmTabela.setItem(linhasCount, 1, nomeQT)
