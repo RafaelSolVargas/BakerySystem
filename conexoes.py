@@ -72,7 +72,7 @@ def Remover_Estoque(produtos):
 
         for produto in produtos:
             cursor.execute(
-                f'UPDATE estoque SET quant=(quant - ?) WHERE codigo=?', (produto[1], produto[0]))
+                f'UPDATE estoque SET quant=(quant - ?) WHERE codigo=?', (int(produto[2]), int(produto[0])))
 
         conn.commit()
 

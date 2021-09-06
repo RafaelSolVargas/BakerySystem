@@ -51,7 +51,6 @@ class Main(QMainWindow, Ui_MainWindow):
             codigoQT = QTableWidgetItem(str(codigo))
             nomeQT = QTableWidgetItem(produto[1])
             quantQT = QTableWidgetItem(str(quant))
-            # precoUnitQT = QTableWidgetItem(str(produto[2]))
             precoUnitQT = QTableWidgetItem(
                 "R$ " + str(f'{produto[2]:.2f}').replace('.', ','))
             precoTotQT = QTableWidgetItem(
