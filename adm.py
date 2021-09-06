@@ -25,13 +25,16 @@ class Adm(QMainWindow, Ui_AdmWindow):
         quantidade = self.txtAdmQuantCadastrar.text()
 
         if codigo != '' and nome != '' and quantidade != '' and preco != '0,00':
-            codigo = int(codigo)
-            preco = float(preco.replace(',','.'))
-            quantidade = int(quantidade)
+            try:
+                codigo = int(codigo)
+                preco = float(preco.replace(',','.'))
+                quantidade = int(quantidade)
 
-            Cadastrar_Produto(codigo, nome, preco, quantidade)
-        else:
-            self.txtAdmMessage.setText("Dados inválidos")
+                Cadastrar_Produto(codigo, nome, preco, quantidade)
+
+                self.txtAdmMessage.setText("PRODUTO CADASTRADO")
+            except:
+                self.txtAdmMessage.setText("DADOS INVÁLIDOS")
 
         self.txtAdmCodCadastrar.clear()
         self.txtAdmNomeCadastrar.clear()
@@ -45,46 +48,50 @@ class Adm(QMainWindow, Ui_AdmWindow):
         quantidade = self.txtAdmQuantAtualizar.text()
 
         if codigo != '' and nome != '' and quantidade != '' and preco != '0,00':
-            codigo = int(codigo)
-            preco = float(preco.replace(',','.'))
-            quantidade = int(quantidade)
+            try:
+                codigo = int(codigo)
+                preco = float(preco.replace(',','.'))
+                quantidade = int(quantidade)
 
-            Atualizar_Produto(codigo, nome, preco, quantidade)
+                Atualizar_Produto(codigo, nome, preco, quantidade)
 
-            self.txtAdmNomeAtualizar.setEnabled(False)
-            self.txtAdmNomeAtualizar.clear()
+                self.txtAdmNomeAtualizar.setEnabled(False)
+                self.txtAdmNomeAtualizar.clear()
 
-            self.txtAdmPrecoAtualizar.setEnabled(False)
-            self.txtAdmPrecoAtualizar.clear()
+                self.txtAdmPrecoAtualizar.setEnabled(False)
+                self.txtAdmPrecoAtualizar.clear()
 
-            self.txtAdmQuantAtualizar.setEnabled(False)
-            self.txtAdmQuantAtualizar.clear()
+                self.txtAdmQuantAtualizar.setEnabled(False)
+                self.txtAdmQuantAtualizar.clear()
 
-            self.btnAdmAtualizar.setEnabled(False)
-            self.txtAdmCodAtualizar.clear()
-        else:
-            self.txtAdmMessage.setText("Dados inválidos")
+                self.btnAdmAtualizar.setEnabled(False)
+                self.txtAdmCodAtualizar.clear()
+
+                self.txtAdmMessage.setText("INFORMAÇÕES DO PRODUTO ATUALIZADAS")
+            except:
+                self.txtAdmMessage.setText("DADOS INVÁLIDOS")
 
     def BuscarProduto(self):
         codigo = self.txtAdmCodAtualizar.text()
 
         if codigo != '':
-            codigo = int(codigo)
-            
-            dados = Buscar_Produto(codigo)
+            try:
+                codigo = int(codigo)
 
-            self.txtAdmNomeAtualizar.setEnabled(True)
-            self.txtAdmNomeAtualizar.setText(str(dados[1]))
+                dados = Buscar_Produto(codigo)
 
-            self.txtAdmPrecoAtualizar.setEnabled(True)
-            self.txtAdmPrecoAtualizar.setValue(float(dados[3]))
+                self.txtAdmNomeAtualizar.setEnabled(True)
+                self.txtAdmNomeAtualizar.setText(str(dados[1]))
 
-            self.txtAdmQuantAtualizar.setEnabled(True)
-            self.txtAdmQuantAtualizar.setValue(int(dados[2]))
+                self.txtAdmPrecoAtualizar.setEnabled(True)
+                self.txtAdmPrecoAtualizar.setValue(float(dados[3]))
 
-            self.btnAdmAtualizar.setEnabled(True)
-        else:
-            self.txtAdmMessage.setText("CÓDIGO INVÁLIDO")
+                self.txtAdmQuantAtualizar.setEnabled(True)
+                self.txtAdmQuantAtualizar.setValue(int(dados[2]))
+
+                self.btnAdmAtualizar.setEnabled(True)
+            except:
+                self.txtAdmMessage.setText("CÓDIGO INVÁLIDO")
 
     def CadastrarUser(self):
         login = self.txtAdmLogin.text()
@@ -123,6 +130,8 @@ class Adm(QMainWindow, Ui_AdmWindow):
             self.tabAdmTabela.setItem(linhasCount, 3, quantQT)
             self.tabAdmTabela.setItem(linhasCount, 4, totalQT)
 
+        self.txtAdmMessage.setText("HISTÓRICO DE COMPRAS:")
+
     def BuscarEstoque(self):
        self.tabAdmTabela.clearContents()
        self.tabAdmTabela.setRowCount(0)
@@ -145,4 +154,5 @@ class Adm(QMainWindow, Ui_AdmWindow):
             self.tabAdmTabela.setItem(linhasCount, 1, nomeQT)
             self.tabAdmTabela.setItem(linhasCount, 2, quantQT)
             self.tabAdmTabela.setItem(linhasCount, 3, precoQT)
-       
+
+       self.txtAdmMessage.setText("DADOS DO ESTOQUE:")
