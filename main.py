@@ -51,8 +51,11 @@ class Main(QMainWindow, Ui_MainWindow):
             codigoQT = QTableWidgetItem(str(codigo))
             nomeQT = QTableWidgetItem(produto[1])
             quantQT = QTableWidgetItem(str(quant))
-            precoUnitQT = QTableWidgetItem(str(produto[2]))
-            precoTotQT = QTableWidgetItem(str(produto[2]*quant))
+            # precoUnitQT = QTableWidgetItem(str(produto[2]))
+            precoUnitQT = QTableWidgetItem(
+                "R$ " + str(f'{produto[2]:.2f}').replace('.', ','))
+            precoTotQT = QTableWidgetItem(
+                "R$ " + str(f'{produto[2]*int(quant):.2f}').replace('.', ','))
 
             # Adiciona cada item na nova linha e na coluna correta
             self.tabCarrinho.setItem(linhasCount, 0, codigoQT)
@@ -87,7 +90,7 @@ class Main(QMainWindow, Ui_MainWindow):
         if lista_Compra == []:
             self.txtMainMessage.setText(
                 "CARRINHO VAZIO")
-        
+
         # Implementar chamada para Atualizar Estoque
         Remover_Estoque(lista_Compra)
         # Implementar chamada para Adicionar venda ao Histórico
