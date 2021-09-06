@@ -26,12 +26,17 @@ class Adm(QMainWindow, Ui_AdmWindow):
 
         if codigo != '' and nome != '' and quantidade != '' and preco != '0,00':
             codigo = int(codigo)
-            preco = float(preco)
+            preco = float(preco.replace(',','.'))
             quantidade = int(quantidade)
 
             Cadastrar_Produto(codigo, nome, preco, quantidade)
         else:
             self.txtAdmMessage.setText("Dados inválidos")
+
+        self.txtAdmCodCadastrar.clear()
+        self.txtAdmNomeCadastrar.clear()
+        self.txtAdmPrecoCadastrar.clear()
+        self.txtAdmQuantCadastrar.clear()
 
     def AtualizarProduto(self):
         codigo = self.txtAdmCodAtualizar.text()
@@ -110,7 +115,7 @@ class Adm(QMainWindow, Ui_AdmWindow):
             nomeQT = QTableWidgetItem(i[2])
             dataQT = QTableWidgetItem(i[3])
             quantQT = QTableWidgetItem(str(i[4]))
-            totalQT = QTableWidgetItem(str(i[5]))
+            totalQT = QTableWidgetItem(("R$" + str(i[5])))
 
             self.tabAdmTabela.setItem(linhasCount, 0, codigoQT)
             self.tabAdmTabela.setItem(linhasCount, 1, nomeQT)
@@ -134,7 +139,7 @@ class Adm(QMainWindow, Ui_AdmWindow):
             codigoQT = QTableWidgetItem(str(i[0]))
             nomeQT = QTableWidgetItem(i[1])
             quantQT = QTableWidgetItem(str(i[2]))
-            precoQT = QTableWidgetItem(str(i[3]))
+            precoQT = QTableWidgetItem(("R$" + str(i[3])))
 
             self.tabAdmTabela.setItem(linhasCount, 0, codigoQT)
             self.tabAdmTabela.setItem(linhasCount, 1, nomeQT)

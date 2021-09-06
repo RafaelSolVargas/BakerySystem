@@ -155,7 +155,7 @@ def Cadastrar_User(login, senha):
 def Cadastrar_Produto(codigo, nome, preco, quantidade):
     with Conectar(databasePath) as (conn, cursor):
         cursor.execute(
-            'INSERT INTO estoque (codigo, nome, preco, quant) VALUES (?, ?, ?, ?)',
+            'INSERT or IGNORE INTO estoque (codigo, nome, preco, quant) VALUES (?, ?, ?, ?)',
             (codigo, nome, preco, quantidade))
         conn.commit()
 
