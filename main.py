@@ -1,8 +1,5 @@
-import sys  # Importando bibliotecas externas
-# Importando bibliotecas externas
-from PyQt5.QtWidgets import QMainWindow, QApplication, QTableWidget, QTableWidgetItem
-
-# Importando funções de outros arquivos e o design das abas
+import sys
+from PyQt5.QtWidgets import QMainWindow, QApplication,  QTableWidgetItem
 from conexoes import *
 from login import Login
 from designs.designMain import Ui_MainWindow
@@ -34,7 +31,7 @@ class Main(QMainWindow, Ui_MainWindow):
         codigo = self.txtMainCod.text()
         quant = self.txtMainQuant.text()
 
-        if codigo == "" or quant == "":
+        if codigo == "" or quant == "" or quant == "0":
             self.txtMainMessage.setText(
                 "DADOS INCOMPLETOS, COLOQUE ALGO")
             return
@@ -129,11 +126,12 @@ class Main(QMainWindow, Ui_MainWindow):
             # Fazendo o cálculo do total da compra
             totalProd = self.tabCarrinho.item(linha, 4).text()
             totalProd = totalProd.replace(',', '.').replace('R$', '')
-            totalCompra += (float(item))
+            totalCompra += (float(totalProd))
 
         # Retorna ao cliente o valor total gasto com a compra
+        totalCompra = f'{totalCompra:.2f}'.replace('.', ',')
         self.txtMainMessage.setText(
-            "COMPRA FINALIZADA! TOTAL DA COMPRA: R$ {:.2f}".format(totalCompra))
+            f"COMPRA FINALIZADA! TOTAL DA COMPRA: R$ {totalCompra}")
 
         # Chama as funções para atualizar o estoque e o histórico de compras
         Remover_Estoque(lista_Compra)

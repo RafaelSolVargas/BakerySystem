@@ -12,23 +12,19 @@ class Login(QMainWindow, Ui_LoginWindow):
         self.btnLoginCancelar.clicked.connect(self.Fechar)
         self.btnLogingLogin.clicked.connect(self.Verificar)
 
-    # Função para verificar se o login e senha batem
     def Verificar(self):
-        login = self.txtLoginLogin.text()  # Puxa texto do label login
-        senha = self.txtLoginSenha.text()  # Puxa texto do label senha
+        login = self.txtLoginLogin.text()
+        senha = self.txtLoginSenha.text()
 
-        # Chama a função de conexão para verificar se existe o usuário no DB
         if Verificar_User(login, senha):
-            self.Abrir_Adm()  # Se sim chama a função para Abrir_Adm
+            self.Abrir_Adm()
         else:
-            self.txtLoginMessage.setText("Dados inválidos")
+            self.txtLoginMessage.setText("Senha ou Login inválido")
 
-    # Função para fechar essa tela e abrir a ADM
     def Abrir_Adm(self):
         self.Fechar()
         self.admWindow = Adm()
         self.admWindow.show()
 
-    # Fecha essa tela
     def Fechar(self):
         self.close()

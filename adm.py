@@ -26,18 +26,31 @@ class Adm(QMainWindow, Ui_AdmWindow):
         quantidade = self.txtAdmQuantCadastrar.text()
 
         if codigo != '' and nome != '' and quantidade != '' and preco != '0,00':
-            try:
-                codigo = int(codigo)
-                preco = float(preco.replace(',', '.'))
-                quantidade = int(quantidade)
+            if len(codigo) == 5:
+                if codigo[0] != 0:
+                    try:
+                        # Só tenta transformar para inteiro, sem interferir no tipo de dado do código
+                        codigo2 = int(codigo)
+                        # para que caso o código comece com 0 não perca o valor, note que o valor não é enviado ao bd
+                        preco = float(preco.replace(',', '.'))
+                        quantidade = int(quantidade)
 
-                Cadastrar_Produto(codigo, nome, preco, quantidade)
+                        Cadastrar_Produto(codigo, nome, preco, quantidade)
 
-                self.txtAdmMessage.setText("PRODUTO CADASTRADO")
-            except:
-                self.txtAdmMessage.setText("DADOS INVÁLIDOS")
+                        self.txtAdmMessage.setText("PRODUTO CADASTRADO")
+                    except:
+                        self.txtAdmMessage.setText("DADOS INVÁLIDOS")
+                        return
+                else:
+                    self.txtAdmMessage.setText(
+                        'O CÓDIGO NÃO PODE COMEÇAR COM UM ZERO')
+                    return
+            else:
+                self.txtAdmMessage.setText('O CÓDIGO DEVE CONTER 5 DÍGITOS')
+                return
         else:
             self.txtAdmMessage.setText('DADOS INCOMPLETOS')
+            return
 
         self.txtAdmCodCadastrar.clear()
         self.txtAdmNomeCadastrar.clear()
@@ -145,7 +158,7 @@ class Adm(QMainWindow, Ui_AdmWindow):
             self.tabAdmTabela.setItem(linhasCount, 3, quantQT)
             self.tabAdmTabela.setItem(linhasCount, 4, totalQT)
 
-        self.txtAdmMessage.setText("HISTÓRICO DE COMPRAS:")
+        self.txtAdmMessage.setText("HISTÓRICO DE VENDAS:")
 
     def BuscarEstoque(self):
         self.tabAdmTabela.clearContents()

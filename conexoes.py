@@ -30,7 +30,7 @@ def Verificar_Codigo(codigo, quant):
     mesmo código cadastrado levanta um ValueError alertando a duplicação de códigos ou que 
     não tem produtos suficientes em estoque
     """
-    with Conectar('padaria.db') as (conn, cursor):
+    with Conectar(databasePath) as (conn, cursor):
         cursor.execute(
             f'SELECT codigo, quant FROM estoque WHERE codigo = ({codigo})')
         conn.commit()
@@ -156,9 +156,6 @@ def Cadastrar_User(login, senha):
 
 
 def Cadastrar_Produto(codigo, nome, preco, quantidade):
-    if len(codigo) != 5:
-        raise ValueError("Código deve possuir 5 dígitos")
-
     with Conectar(databasePath) as (conn, cursor):
         cursor.execute(
             'INSERT or IGNORE INTO estoque (codigo, nome, preco, quant) VALUES (?, ?, ?, ?)',
